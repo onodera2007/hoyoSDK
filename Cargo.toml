@@ -1,0 +1,30 @@
+[package]
+name = "hoyo-sdk"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.43.0", features = ["full"] }
+axum = "0.8.1"
+sqlx = { version = "0.8.3", features = ["sqlite", "runtime-tokio"] }
+
+rsa = "0.9.7"
+password-hash = { version = "0.5.0", features = ["alloc", "rand_core"] }
+pbkdf2 = { version = "0.12.2", features = ["simple"] }
+rand = "0.8.5"
+
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
+toml = "0.8.19"
+rbase64 = "2.0.3"
+thiserror = "2.0.11"
+
+regex = "1.11.1"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+
+[profile.release]
+strip = true      # Automatically strip symbols from the binary.
+lto = true        # Link-time optimization.
+opt-level = 3     # Optimize for speed.
+codegen-units = 1 # Maximum size reduction optimizations.
