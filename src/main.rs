@@ -15,6 +15,9 @@ mod database;
 mod handlers;
 mod util;
 
+use std::thread;
+use std::time::Duration;
+
 struct AppState {
     db: DbContext,
     #[expect(dead_code)]
@@ -29,6 +32,7 @@ async fn main() -> ExitCode {
         LazyLock::new(|| config::load_or_create("sdk_server.toml"));
     static STATE: OnceLock<AppState> = OnceLock::new();
     println!("这个dsk是由");
+     thread::sleep(Duration::from_secs(1));
     println!(r#"
           _____                    _____                    _____                    _____          
          /\    \                  /\    \                  /\    \                  /\    \         
@@ -52,6 +56,7 @@ async fn main() -> ExitCode {
         \::/____/                \::/    /                \::/    /                \::/____/        
                                   \/____/                  \/____/                                  
 "#);
+thread::sleep(Duration::from_secs(1));
     println!(r#"
       _____                   _______                   _____          
      |\    \                 /::\    \                 /\    \         
@@ -75,6 +80,7 @@ async fn main() -> ExitCode {
                               ~~                      \::/____/        
                                                        ~~              
     "#);
+    thread::sleep(Duration::from_secs(1));
     println!(r#"
           _____                   _______         
          /\    \                 /::\    \        
@@ -98,9 +104,11 @@ async fn main() -> ExitCode {
         \::/____/                 ~~              
          ~~                                     
     "#);
+    thread::sleep(Duration::from_secs(1));
     println!("修改，如果可以请支持");
     println!("
   _____                                  _ _____                           \n |  __ \\                                | |  __ \\                          \n | |__) |_____   _____ _ __ ___  ___  __| | |__) |___   ___  _ __ ___  ___ \n |  _  // _ \\ \\ / / _ \\ '__/ __|/ _ \\/ _` |  _  // _ \\ / _ \\| '_ ` _ \\/ __|\n | | \\ \\  __/\\ V /  __/ |  \\__ \\  __/ (_| | | \\ \\ (_) | (_) | | | | | \\__ \\\n |_|  \\_\\___| \\_/ \\___|_|  |___/\\___|\\__,_|_|  \\_\\___/ \\___/|_| |_| |_|___/");
+  thread::sleep(Duration::from_secs(1));
     println!("启动后访问http://127.0.0.1:20100/account/register 后随便输入账号密码即可注册一个账号");
 
     init_tracing();
