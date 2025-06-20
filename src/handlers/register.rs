@@ -21,38 +21,38 @@ async fn process_register_request(
     Form(form): Form<RegisterForm>,
 ) -> Html<String> {
     let Some(username) = Username::parse(form.username) else {
-        return html_result(ResultStatus::Failure, "Invalid username format; should consists of characters [A-Za-z0-9_] and be at least 6 characters long.");
+        return html_result(ResultStatus::Failure, "无效的用户名格式；应包含[A-Za-z0-9_]字符且至少6个字符长。");
     };
 
     let password = match Password::new(form.password, form.password_v2) {
         Ok(password) => password,
         Err(PasswordError::PairMismatch) => {
-            return html_result(ResultStatus::Failure, "Passwords pair doesn't match")
+            return html_result(ResultStatus::Failure, "两次输入的密码不匹配")
         }
         Err(PasswordError::RequirementsMismatch) => {
             return html_result(
                 ResultStatus::Failure,
-                "Password should contain at least 8 and not more than 30 characters",
+                "密码长度应在8到30个字符之间",
             )
         }
         Err(PasswordError::HashFailed(err)) => {
-            tracing::error!("failed to hash password, err: {err}");
-            return html_result(ResultStatus::Failure, "Internal server error");
+            tracing::error!("密码哈希失败, 错误: {err}");
+            return html_result(ResultStatus::Failure, "服务器内部错误");
         }
     };
 
     match state.db.create_account(username, password).await {
         Ok(Some(_)) => html_result(
             ResultStatus::Success,
-            "Account successfully registered, now you can use in-game login",
+            "账号注册成功，现在您可以使用游戏内登录",
         ),
         Ok(None) => html_result(
             ResultStatus::Failure,
-            "Account with specified username already exists",
+            "该用户名已被注册",
         ),
         Err(err) => {
-            tracing::error!("database operation error: {err}");
-            html_result(ResultStatus::Failure, "Internal server error")
+            tracing::error!("数据库操作错误: {err}");
+            html_result(ResultStatus::Failure, "服务器内部错误")
         }
     }
 }
